@@ -4,6 +4,7 @@ const uglify = require("gulp-uglify");
 const concat = require("gulp-concat");
 const rename = require("gulp-rename");
 const cleanCSS = require('gulp-clean-css');
+const processhtml = require('gulp-processhtml');
 const del = require("del");
 
 function clean(cb) {
@@ -33,5 +34,11 @@ function uglify_css(cb) {
     .pipe(dest('dist'))
 }
 
-const build = series(clean, parallel(uglify_js, uglify_css));
+function process_html(cb) {
+  return src('./*.html')
+    .pipe(processhtml())
+    .pipe(dest('dist'));
+}
+
+const build = series(clean, parallel(uglify_js, uglify_css), process_html);
 exports.default = build;
